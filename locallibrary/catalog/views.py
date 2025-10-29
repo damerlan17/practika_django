@@ -27,17 +27,26 @@ def index(request):
 
 class BookListView(generic.ListView):
     model = Book
-
-    def get_context_data(self, **kwargs):
-        # В первую очередь получаем базовую реализацию контекста
-        context = super(BookListView, self).get_context_data(**kwargs)
-        # Добавляем новую переменную к контексту и инициализируем её некоторым значением
-        context['some_data'] = 'This is just some data'
-        return context
-
-    queryset = Book.objects.filter(title__icontains='war')[:5]  # Получение 5 книг, содержащих слово 'war' в заголовке
-    template_name = 'books/my_arbitrary_template_name_list.html'  # Определение имени вашего шаблона и его расположения
+    context_object_name = 'book_list'   # ваше собственное имя переменной контекста в шаблоне
+    queryset = Book.objects.filter(title__icontains='war')[:5] # Получение 5 книг, содержащих слово 'war' в заголовке
+    template_name = 'book/my_arbitrary_template_name_list.html'  # Определение имени вашего шаблона и его расположения
 
 
 class BookDetailView(generic.DetailView):
     model = Book
+
+class BookListView(generic.ListView):
+    model = Book
+    paginate_by = 10
+
+class AuthorListView(generic.ListView):
+    model = Author
+    context_object_name = 'author_list'   # ваше собственное имя переменной контекста в шаблоне
+    template_name = 'book/my_arbitrary_template_name_list.html'  # Определение имени вашего шаблона и его расположения
+
+class AuthorListView(generic.ListView):
+    model = Author
+    paginate_by = 10
+
+class AuthorDetailView(generic.DetailView):
+    model = Author
