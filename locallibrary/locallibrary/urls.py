@@ -15,10 +15,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.urls import path
+
 from django.contrib import admin
-from django.urls import include
-from django.urls import path
+from django.urls import include, path
 from django.views.decorators.cache import never_cache
 from django.views.generic import RedirectView
 from django.conf import settings
@@ -29,4 +28,6 @@ urlpatterns = [
                   path('catalog/', include('catalog.urls')),
                   path('', RedirectView.as_view(url='/catalog/', permanent=True)),
                   path('accounts/', include('django.contrib.auth.urls')),
+                  path('accounts/', include('django.contrib.auth.urls')),
+
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

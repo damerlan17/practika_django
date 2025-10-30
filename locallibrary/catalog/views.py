@@ -91,3 +91,29 @@ class LoanedBooksByUserListView(LoginRequiredMixin,generic.ListView):
 
     def get_queryset(self):
         return BookInstance.objects.filter(borrower=self.request.user).filter(status__exact='o').order_by('due_back')
+
+from django.shortcuts import render
+
+def book_list(request):
+    books = Book.objects.all()
+    return render(request, 'catalog/book_list.html', {'books': books})
+
+from django.views.generic import ListView
+from .models import Book
+login_url = '/accounts/login/'
+
+class BookListView(LoginRequiredMixin, ListView):
+    model = Book
+    template_name = 'catalog/book_list.html'
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+
+@login_required
+def book_list(request):
+    books = Book.objects.all()
+    return render(request, 'catalog/book_list.html', {'books': books})
+
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView
+from .models import Book
