@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Book, Genre, Author, BookInstance
+from datetime import date
 
 # admin.site.register(Book),
 # admin.site.register(Author),
@@ -17,10 +18,9 @@ class AuthorAdmin(admin.ModelAdmin):
 
 admin.site.register(Author, AuthorAdmin)
 
-
 @admin.register(BookInstance)
 class BookInstanceAdmin(admin.ModelAdmin):
-    list_display = ('book', 'status', 'due_back', 'id' )
+    list_display = ('book', 'status', 'borrower', 'due_back', 'id' )
     list_filter = ('status', 'due_back')
 
     fieldsets = (
@@ -28,9 +28,17 @@ class BookInstanceAdmin(admin.ModelAdmin):
             'fields': ('book','imprint', 'id')
         }),
         ('Availability', {
-            'fields': ('status', 'due_back')
+            'fields': ('status', 'due_back', 'borrower')
         }),
     )
+
+@property
+def is_overdue(self):
+    if self.due_back and date.today() > self.due_back:
+        return True
+    return False
+
+
 
 class BooksInstanceInline(admin.TabularInline):
     model = BookInstance
@@ -39,5 +47,3 @@ class BooksInstanceInline(admin.TabularInline):
 class BookAdmin(admin.ModelAdmin):
     list_display = ('title', 'author', 'display_genre')
     inlines = [BooksInstanceInline]
-
-    #
