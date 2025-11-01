@@ -16,6 +16,23 @@ class Genre(models.Model):
         """
         return self.name
 
+class Language(models.Model):
+    """
+    Model representing a book genre (e.g. Science Fiction, Non Fiction).
+    """
+    name = models.CharField(max_length=200,
+                            unique=True,
+                            help_text="Enter the book's natural language (e.g. English, French, Japanese etc.)")
+
+    def __str__(self):
+        """
+        String for representing the Model object (in Admin site etc.)
+        """
+
+        return self.name
+
+
+
 
 ########################################################################################################################
 from django.urls import reverse  # Used to generate URLs by reversing the URL patterns
@@ -30,9 +47,9 @@ class Book(models.Model):
     # Foreign Key used because book can only have one author, but authors can have multiple books
     # Author as a string rather than object because it hasn't been declared yet in the file.
     summary = models.TextField(max_length=1000, help_text="Enter a brief description of the book")
-    isbn = models.CharField('ISBN', max_length=13,
-                            help_text='13 Character <a href="https://www.isbn-international.org/content/what-isbn">ISBN number</a>')
+    isbn = models.CharField('ISBN', max_length=13, help_text='13 Character <a href="https://www.isbn-international.org/content/what-isbn">ISBN number</a>')
     genre = models.ManyToManyField(Genre, help_text="Select a genre for this book")
+    language = models.ForeignKey('Language', on_delete=models.SET_NULL, null=True)
 
     # ManyToManyField used because genre can contain many books. Books can cover many genres.
     # Genre class has already been defined so we can specify the object above.
@@ -80,6 +97,9 @@ class BookInstance(models.Model):
         ('a', 'Available'),
         ('r', 'Reserved'),
     )
+
+
+
 
     @property
     def is_overdue(self):
