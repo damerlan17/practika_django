@@ -43,7 +43,8 @@
                 </ul>
                 {% if user.is_staff or perms.catalog.can_mark_returned %}
                 <p>staff</p>
-                <a href="{% url 'all-borrowed' %}">All borrowed books</a>
+                <a href="{% url 'all-borrowed' %}">All borrowed books</a><br>
+                <a href="{% url 'author_create' %}">Author create</a><br>
                 {% endif %}
             </ul>
             {% endblock %}
