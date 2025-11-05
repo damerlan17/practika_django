@@ -1,12 +1,12 @@
 from django.contrib import admin
-from .models import Book, Genre, Author, BookInstance
+from .models import Book, Genre, Author, BookInstance, Language
 from datetime import date
 
 # admin.site.register(Book),
 # admin.site.register(Author),
 # admin.site.register(BookInstance),
 admin.site.register(Genre),
-
+admin.site.register(Language),
 class BookInline(admin.TabularInline):
     model = Book
 
@@ -14,6 +14,8 @@ class AuthorAdmin(admin.ModelAdmin):
     list_display = ('last_name', 'first_name', 'date_of_birth', 'date_of_death')
     fields = ['first_name', 'last_name', ('date_of_birth', 'date_of_death')]
     inlines = [BookInline]
+
+
 
 
 admin.site.register(Author, AuthorAdmin)
